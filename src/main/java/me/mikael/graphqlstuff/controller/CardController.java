@@ -37,20 +37,24 @@ public class CardController {
         return cardRepository.findAllById(ids);
     }
 
-    @BatchMapping
-    public Map<Card, Account> cards(@Argument List<Card> cards){
+    @BatchMapping(field="account", typeName = "Card")
+    public Map<Card, Account> accountsBatch(@Argument List<Card> cards){
         log.info("batchMapping cards={}", cards);
+        var accountIds = cards.stream().map(Card::getAccountId).distinct().toList();
+        var accountsMap = accountRepository.findAllById(accountIds)
+                .stream().collect(java.util.stream.Collectors.toMap(Account::getId, a -> a));
+
         return cards.stream()
                 .collect(java.util.stream.Collectors.toMap(
                         card -> card,
-                        card -> accountRepository.findById(card.getAccountId()).orElse(null))
+                        card -> accountsMap.get(card.getAccountId()))
                 );
     }
 
-    @SchemaMapping
-    public Account account(Card card){
-        return accountRepository.findById(card.getAccountId()).orElse(null);
-    }
+//    @SchemaMapping
+//    public Account account(Card card){
+//        return accountRepository.findById(card.getAccountId()).orElse(null);
+//    }
 
 //    @QueryMapping
 //    public Card getCard(Long id) {
