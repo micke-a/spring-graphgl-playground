@@ -1,0 +1,37 @@
+
+enum CardType {
+    VIRTUAL
+    PHYSICAL
+}
+
+enum AccountType {
+    CURRENT
+    CREDIT
+}
+
+type Card @key(fields: "id"){
+    id: ID!
+    cardHolder: String!
+    cardType: CardType!
+    accountId: ID!
+    account: Account
+
+}
+
+
+type Account @key(fields: "id"){
+    id: ID!
+    accountType: AccountType!
+    owner: String!
+    balance: Float!
+}
+
+
+type Query{
+    getAllCards: [Card]
+    getCard(id: ID!): Card
+    getCards(cardHolder: String!): [Card]
+
+    getAllAccounts: [Account]
+    getAccount(id: ID, owner: String): Account
+}
