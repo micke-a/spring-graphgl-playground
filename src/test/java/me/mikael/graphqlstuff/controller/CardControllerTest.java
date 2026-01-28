@@ -3,6 +3,7 @@ package me.mikael.graphqlstuff.controller;
 
 import me.mikael.graphqlstuff.entity.Card;
 import me.mikael.graphqlstuff.model.CardType;
+import me.mikael.graphqlstuff.repository.AccountRepository;
 import me.mikael.graphqlstuff.repository.CardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,26 @@ class CardControllerTest {
     @MockitoBean
     private CardRepository cardRepository;
 
+    @MockitoBean
+    private AccountRepository accountRepository;
+
     @Test
     void getAllCards_returnsCards() {
         when(cardRepository.findAll()).thenReturn(List.of(
-                new Card(1L, "alice", CardType.PHYSICAL, 10L),
-                new Card(2L, "bob", CardType.VIRTUAL, 11L)
+                new Card(1L, 1L, CardType.PHYSICAL, 10L),
+                new Card(2L, 2L, CardType.VIRTUAL, 11L)
         ));
 
-        graphQlTester.document("{ getAllCards { id cardHolder cardType accountId } }")
+        graphQlTester.document("""
+                        {
+                            getAllCards {
+                                id
+                                cardHolder
+                                cardType
+                                accountId
+                            }
+                        }
+                        """)
                 .execute()
                 .path("getAllCards")
                 .entityList(Card.class)

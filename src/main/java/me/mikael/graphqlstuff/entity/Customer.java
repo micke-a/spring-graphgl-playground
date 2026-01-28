@@ -4,23 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.mikael.graphqlstuff.model.AccountType;
-
-import java.math.BigDecimal;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long ownerId;
-
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
-    private BigDecimal balance;
+    private String name;
 }

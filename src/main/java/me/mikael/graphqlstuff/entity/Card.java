@@ -15,7 +15,7 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String cardHolder;
+    private Long cardHolderId;
 
     @Enumerated(EnumType.STRING)
     private CardType cardType;

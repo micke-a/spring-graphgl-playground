@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mikael.graphqlstuff.entity.Account;
 import me.mikael.graphqlstuff.repository.AccountRepository;
-import me.mikael.graphqlstuff.repository.CardRepository;
 import org.springframework.graphql.data.federation.EntityMapping;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -59,13 +58,13 @@ public class AccountController {
     }
 
     @QueryMapping
-    public Account getAccount(@Argument Long id, @Argument String owner){
-        log.info("getAccount id={}, owner={}", id, owner);
+    public Account getAccount(@Argument Long id, @Argument Long ownerId){
+        log.info("getAccount id={}, ownerId={}", id, ownerId);
         if(id != null){
             return accountRepository.findById(id).orElse(null);
         }
-        if(owner != null){
-            return accountRepository.findByOwner(owner).stream().findFirst().orElse(null);
+        if(ownerId != null){
+            return accountRepository.findByOwnerId(ownerId).stream().findFirst().orElse(null);
         }
         return null;
     }

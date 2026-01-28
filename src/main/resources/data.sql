@@ -1,20 +1,29 @@
-insert into card (card_holder, card_type, account_id)
-values
-    ('john', 'VIRTUAL', '1'),
-    ('john', 'PHYSICAL', '1'),
-    ('jane', 'VIRTUAL', '2'),
-    ('jane', 'PHYSICAL', '2'),
-    ('dude', 'VIRTUAL', '3'),
-    ('dude', 'PHYSICAL', '3'),
-    ('drake', 'VIRTUAL', '4'),
-    ('drake', 'PHYSICAL', '4'),
-    ('yolo', 'VIRTUAL', '5'),
-    ('yolo', 'PHYSICAL', '5');
 
-insert into account (owner, account_type, balance)
+insert into customer (name)
 values
-    ('john', 'CURRENT', 1000),
-    ('jane', 'CURRENT', 1000),
-    ('dude', 'CURRENT', 1000),
-    ('drake', 'CURRENT', 1000),
-    ('yolo', 'CURRENT', 1000);
+    ('john'),
+    ('jane'),
+    ('dude'),
+    ('drake'),
+    ('yolo');
+
+insert into card (card_holder_id, card_type, account_id)
+values
+    (1, 'VIRTUAL', '1'),
+    (1, 'PHYSICAL', '1'),
+    (2, 'VIRTUAL', '2'),
+    (2, 'PHYSICAL', '2'),
+    (3, 'VIRTUAL', '3'),
+    (3, 'PHYSICAL', '3'),
+    (4, 'VIRTUAL', '4'),
+    (4, 'PHYSICAL', '4'),
+    (5, 'VIRTUAL', '5'),
+    (5, 'PHYSICAL', '5');
+
+insert into account (owner_id, account_type, balance)
+values
+    (1, 'CURRENT', 1000),
+    (2, 'CURRENT', 1000),
+    (3, 'CURRENT', 1000),
+    (4, 'CURRENT', 1000),
+    (5, 'CURRENT', 1000);

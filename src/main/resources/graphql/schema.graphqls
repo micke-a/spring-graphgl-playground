@@ -11,19 +11,23 @@ enum AccountType {
 
 type Card @key(fields: "id"){
     id: ID!
-    cardHolder: String!
+    cardHolderId: ID!
     cardType: CardType!
     accountId: ID!
     account: Account
-
 }
 
 
 type Account @key(fields: "id"){
     id: ID!
     accountType: AccountType!
-    owner: String!
+    ownerId: ID!
     balance: Float!
+}
+
+type Customer{
+    id: ID!
+    name: String!
 }
 
 
@@ -34,4 +38,7 @@ type Query{
 
     getAllAccounts: [Account]
     getAccount(id: ID, owner: String): Account
+
+    getAllCustomers: [Customer]
+    getCustomer(id: ID): Customer
 }

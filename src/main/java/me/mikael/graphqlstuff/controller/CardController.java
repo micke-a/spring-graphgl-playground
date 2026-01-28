@@ -68,9 +68,9 @@ public class CardController {
     }
 
     @QueryMapping
-    public List<Card> getCards(@Argument String cardHolder){
-        log.info("getCards cardHolder={}", cardHolder);
-        return cardRepository.findAllByCardHolder(cardHolder);
+    public List<Card> getCards(@Argument Long cardHolderId){
+        log.info("getCards cardHolderId={}", cardHolderId);
+        return cardRepository.findAllByCardHolderId(cardHolderId);
     }
 
 }

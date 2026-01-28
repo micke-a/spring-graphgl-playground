@@ -68,7 +68,7 @@ http://localhost:8080/graphiql
 ### What are Entity types
 https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro
 
-Apparently this is any Object type which has a `@key` directive in their definition.
+Apparently this is any Object type that has a `@key` directive in their definition.
 These `@key` fields(s) must uniquely identify an instance of an Object. 
 Sounds the same as the primary key on a Database table.
 
@@ -95,11 +95,11 @@ type Product @key(fields: "productUpc") {
 You can implement something like `HeaderToContextValueGraphQlRequestInterceptor` which puts then into the GraphQLContext.
 After which they can be accessed from the `GraphQLContext` object, which can be added as an argument to any QueryMapping method.
 
-Or `@ContectValue` can also be used to pluck specific header values out of the context and passed into methods as arguments.
+Or `@ContextValue` can also be used to pluck specific header values out of the context and passed into methods as arguments.
 
 ### Federation 
 
-Got this error when strating to try and figure out how this works
+Got this error when starting to try and figure out how this works
 
 ```shell
 Caused by: java.lang.NoClassDefFoundError: com/apollographql/federation/graphqljava/SchemaTransformer
