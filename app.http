@@ -1,3 +1,14 @@
 
 
 GET http://localhost:8080/graphql/schema
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+{
+    getAllCustomers {
+        id
+        name
+        greeting
+    }
+}

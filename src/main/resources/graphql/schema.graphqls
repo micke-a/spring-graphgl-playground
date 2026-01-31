@@ -28,6 +28,8 @@ type Account @key(fields: "id"){
 type Customer{
     id: ID!
     name: String!
+    # See GraphQlConfiguration for how greeting is resolved via manual wiring
+    greeting: String
 }
 
 
