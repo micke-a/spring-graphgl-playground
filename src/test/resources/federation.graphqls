@@ -1,0 +1,6 @@
+# Needed for GrahQL test slices not to throw errors related to the federation directives
+directive @key(fields: String!) on OBJECT | INTERFACE
+directive @external on FIELD_DEFINITION
+directive @requires(fields: String!) on FIELD_DEFINITION
+directive @provides(fields: String!) on FIELD_DEFINITION
+directive @extends on OBJECT | INTERFACE

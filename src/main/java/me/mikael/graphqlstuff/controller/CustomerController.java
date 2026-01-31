@@ -2,10 +2,13 @@ package me.mikael.graphqlstuff.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.mikael.graphqlstuff.entity.Card;
 import me.mikael.graphqlstuff.entity.Customer;
+import me.mikael.graphqlstuff.repository.CardRepository;
 import me.mikael.graphqlstuff.repository.CustomerRepository;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mikael.graphqlstuff.entity.Account;
 import me.mikael.graphqlstuff.entity.Card;
+import me.mikael.graphqlstuff.entity.Customer;
 import me.mikael.graphqlstuff.repository.AccountRepository;
 import me.mikael.graphqlstuff.repository.CardRepository;
 import org.springframework.graphql.data.federation.EntityMapping;
@@ -36,6 +37,14 @@ public class CardController {
         log.info("entityMapping cards ids={}", ids);
         return cardRepository.findAllById(ids);
     }
+
+    @SchemaMapping
+    public List<Card> cards(Customer customer) {
+        log.info("Resolving cards for customer id={}", customer.getId());
+        return cardRepository.findAllByCardHolderId(customer.getId());
+    }
+
+
 
     @BatchMapping(field="account", typeName = "Card")
     public Map<Card, Account> accountsBatch(@Argument List<Card> cards){
