@@ -12,3 +12,52 @@ GRAPHQL http://localhost:8080/graphql
         greeting
     }
 }
+
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+query  {
+    getAllCards {
+        account {
+            accountType
+        }
+    }
+}
+
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+query{
+    getAllCards {
+        id
+        cardHolder
+        account{
+            id
+            ownerId
+            balance
+        }
+    }
+}
+
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+query{
+    getAllCustomers {
+        id
+        name
+    }
+}
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+query{
+    getCustomer(id: 2) {
+        id
+        name
+    }
+}
