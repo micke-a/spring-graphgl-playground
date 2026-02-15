@@ -61,3 +61,53 @@ query{
         name
     }
 }
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+mutation {
+    createCustomer(input: { name: "Alice" }) {
+        id
+        name
+    }
+}
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+mutation {
+    createAccount(input: { ownerId: 1, accountType: CURRENT, balance: 500.0 }) {
+        id
+        ownerId
+        accountType
+        balance
+    }
+}
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+mutation {
+    createCard(input: { cardHolderId: 1, accountId: 1, cardType: PHYSICAL }) {
+        id
+        cardHolderId
+        cardType
+        accountId
+    }
+}
+
+###
+GRAPHQL http://localhost:8080/graphql
+
+mutation {
+    createCustomerAccountCard(input: {
+        customer: { name: "Bob" }
+        account: { accountType: CREDIT, balance: 1000.0 }
+        card: { cardType: VIRTUAL }
+    }) {
+        customer { id name }
+        account { id ownerId accountType balance }
+        card { id cardHolderId accountId cardType }
+        errors { message path }
+    }
+}

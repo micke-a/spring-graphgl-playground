@@ -44,3 +44,44 @@ type Query{
     getAllCustomers: [Customer]
     getCustomer(id: ID): Customer
 }
+
+input CreateCustomerInput {
+    name: String!
+}
+
+input CreateAccountInput {
+    ownerId: ID
+    accountType: AccountType!
+    balance: Float!
+}
+
+input CreateCardInput {
+    cardHolderId: ID
+    accountId: ID
+    cardType: CardType!
+}
+
+input CreateCustomerAccountCardInput {
+    customer: CreateCustomerInput
+    account: CreateAccountInput
+    card: CreateCardInput
+}
+
+type UserError {
+    message: String!
+    path: [String!]
+}
+
+type CreateCustomerAccountCardPayload {
+    customer: Customer
+    account: Account
+    card: Card
+    errors: [UserError!]!
+}
+
+type Mutation {
+    createCustomer(input: CreateCustomerInput!): Customer!
+    createAccount(input: CreateAccountInput!): Account!
+    createCard(input: CreateCardInput!): Card!
+    createCustomerAccountCard(input: CreateCustomerAccountCardInput!): CreateCustomerAccountCardPayload!
+}
