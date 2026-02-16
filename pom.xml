@@ -42,6 +42,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.apollographql.federation/federation-graphql-java-support -->
 		<dependency>

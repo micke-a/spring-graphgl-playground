@@ -35,6 +35,16 @@ Three entities with these relationships:
 - **Apollo Federation**: `GraphQlConfiguration` creates a `FederationSchemaFactory` bean and customizes `GraphQlSource` to apply federation directives. Entity resolution is handled by `@EntityMapping` methods in controllers.
 - **Header-to-context interceptor**: `HeaderToContextValueGraphQlRequestInterceptor` extracts HTTP headers into `GraphQLContext`, making them available to resolvers.
 - **Manual field wiring**: The `Customer.greeting` field is resolved via a `RuntimeWiringConfigurer` bean in `GraphQlConfiguration`, not through a controller.
+- **Spring data JPA**: for everything related to reading and writing to the database
+- **Service layer**: no business logic in the controller, all business logic is to be put into a service layer
+
+### Front end
+
+Server side rendering is done using freemarker templates which sets up the layout and includes necessary JavaScript and CSS.
+
+Dynamic UI is created by using Alpine.js which in turn makes GraphQL requests to the backend.
+
+Bootstrap 5 is used for CSS styling and controls the layout.
 
 ### Testing
 
