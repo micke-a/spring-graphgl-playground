@@ -8,6 +8,10 @@
     cards: [],
     loading: true,
     error: null,
+    showForm: false,
+    newName: '',
+    submitting: false,
+    submitError: null,
     async init() {
         try {
             const [custData, acctData, cardData] = await Promise.all([
@@ -20,10 +24,73 @@
             this.cards = cardData.getAllCards || [];
         } catch (e) { this.error = e.message; }
         finally { this.loading = false; }
+    },
+    async createCustomer() {
+        this.submitting = true;
+        this.submitError = null;
+        try {
+            const data = await graphqlFetch(`mutation($input: CreateCustomerAccountCardInput!) {
+                createCustomerAccountCard(input: $input) {
+                    customer { id name }
+                    account { id }
+                    card { id }
+                    errors { message }
+                }
+            }`, {
+                input: {
+                    customer: { name: this.newName },
+                    account: { accountType: 'CURRENT', balance: 0 },
+                    card: { cardType: 'VIRTUAL' }
+                }
+            });
+            const payload = data.createCustomerAccountCard;
+            if (payload.errors.length > 0) {
+                this.submitError = payload.errors.map(e => e.message).join(', ');
+                return;
+            }
+            await this.init();
+            this.showForm = false;
+            this.newName = '';
+        } catch (e) { this.submitError = e.message; }
+        finally { this.submitting = false; }
     }
 }">
 
-    <h1 class="mb-4">Dashboard</h1>
+    <div class="d-flex align-items-center mb-4">
+        <h1 class="mb-0">Dashboard</h1>
+        <button class="btn btn-primary ms-3" @click="showForm = true; submitError = null">New Customer</button>
+    </div>
+
+    <!-- Create Customer Modal -->
+    <div class="modal fade" :class="{ show: showForm }" :style="showForm ? 'display:block' : 'display:none'" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Customer</h5>
+                    <button type="button" class="btn-close" @click="showForm = false" :disabled="submitting"></button>
+                </div>
+                <div class="modal-body">
+                    <template x-if="submitError">
+                        <div class="alert alert-danger" x-text="submitError"></div>
+                    </template>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="customerName" x-model="newName" :disabled="submitting"
+                               @keydown.enter="newName.trim() && !submitting && createCustomer()">
+                    </div>
+                    <p class="text-muted small">A CURRENT account (balance $0) and VIRTUAL card will be created automatically.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="showForm = false" :disabled="submitting">Cancel</button>
+                    <button type="button" class="btn btn-primary" @click="createCustomer()" :disabled="submitting || !newName.trim()">
+                        <span x-show="submitting" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show" x-show="showForm" style="display: none;"></div>
 
     <template x-if="loading">
         <div class="text-center py-5">

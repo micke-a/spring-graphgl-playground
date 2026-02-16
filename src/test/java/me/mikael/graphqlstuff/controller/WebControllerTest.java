@@ -39,7 +39,7 @@ class WebControllerTest {
         assertThat(body).contains("href=\"/graphiql\"");
 
         // Home page content
-        assertThat(body).contains("<h1 class=\"mb-4\">Dashboard</h1>");
+        assertThat(body).contains("Dashboard</h1>");
 
         // Stat cards
         assertThat(body).contains("<h5 class=\"card-title\">Customers</h5>");
@@ -56,5 +56,11 @@ class WebControllerTest {
         assertThat(body).contains("getAllCustomers");
         assertThat(body).contains("getAllAccounts");
         assertThat(body).contains("getAllCards");
+
+        // New Customer button and modal
+        assertThat(body).contains("New Customer");
+        assertThat(body).contains("createCustomer()");
+        assertThat(body).contains("createCustomerAccountCard");
+        assertThat(body).contains("id=\"customerName\"");
     }
 }
