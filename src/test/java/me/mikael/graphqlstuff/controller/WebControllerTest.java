@@ -1,5 +1,7 @@
 package me.mikael.graphqlstuff.controller;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,46 +23,51 @@ class WebControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        String body = response.getBody();
+        var body = response.getBody();
         assertThat(body).isNotNull();
 
+        var doc = Jsoup.parse(body);
+
         // Base layout elements
-        assertThat(body).contains("<!DOCTYPE html>");
-        assertThat(body).contains("<title>Home - GraphQL Playground</title>");
-        assertThat(body).contains("bootstrap@5.3.3");
-        assertThat(body).contains("alpinejs");
-        assertThat(body).contains("function graphqlFetch");
+        assertThat(doc.title()).isEqualTo("Home - GraphQL Playground");
+        assertThat(doc.select("link[href*=bootstrap@5.3.3]")).isNotEmpty();
+        assertThat(doc.select("script[src*=alpinejs]")).isNotEmpty();
+        assertThat(doc.select("script").stream()
+                .anyMatch(el -> el.data().contains("function graphqlFetch"))).isTrue();
 
         // Navbar links
-        assertThat(body).contains("href=\"/\"");
-        assertThat(body).contains("href=\"/customers\"");
-        assertThat(body).contains("href=\"/accounts\"");
-        assertThat(body).contains("href=\"/cards\"");
-        assertThat(body).contains("href=\"/graphiql\"");
+        assertThat(doc.select("nav a[href=/]")).isNotEmpty();
+        assertThat(doc.select("nav a[href=/customers]")).isNotEmpty();
+        assertThat(doc.select("nav a[href=/accounts]")).isNotEmpty();
+        assertThat(doc.select("nav a[href=/cards]")).isNotEmpty();
+        assertThat(doc.select("nav a[href=/graphiql]")).isNotEmpty();
 
         // Home page content
-        assertThat(body).contains("Dashboard</h1>");
+        assertThat(doc.select("h1:containsOwn(Dashboard)")).isNotEmpty();
 
         // Stat cards
-        assertThat(body).contains("<h5 class=\"card-title\">Customers</h5>");
-        assertThat(body).contains("<h5 class=\"card-title\">Accounts</h5>");
-        assertThat(body).contains("<h5 class=\"card-title\">Cards</h5>");
-        assertThat(body).contains("<h5 class=\"card-title\">Total Balance</h5>");
+        assertThat(doc.select("h5.card-title:containsOwn(Customers)")).isNotEmpty();
+        assertThat(doc.select("h5.card-title:containsOwn(Accounts)")).isNotEmpty();
+        assertThat(doc.select("h5.card-title:containsOwn(Cards)")).isNotEmpty();
+        assertThat(doc.select("h5.card-title:containsOwn(Total Balance)")).isNotEmpty();
 
         // Recent customers table
-        assertThat(body).contains("Recent Customers");
+        assertThat(doc.select("h3:containsOwn(Recent Customers)")).isNotEmpty();
 
         // Alpine.js data binding
-        assertThat(body).contains("x-data");
-        assertThat(body).contains("async init()");
-        assertThat(body).contains("getAllCustomers");
-        assertThat(body).contains("getAllAccounts");
-        assertThat(body).contains("getAllCards");
+        var xDataElements = doc.select("[x-data]");
+        assertThat(xDataElements).isNotEmpty();
+        var xDataValue = xDataElements.first().attr("x-data");
+        assertThat(xDataValue).contains("async init()");
+        assertThat(xDataValue).contains("getAllCustomers");
+        assertThat(xDataValue).contains("getAllAccounts");
+        assertThat(xDataValue).contains("getAllCards");
 
         // New Customer button and modal
-        assertThat(body).contains("New Customer");
-        assertThat(body).contains("createCustomer()");
-        assertThat(body).contains("createCustomerAccountCard");
-        assertThat(body).contains("id=\"customerName\"");
+        assertThat(doc.select("button:containsOwn(New Customer)")).isNotEmpty();
+        assertThat(doc.select(".modal")).isNotEmpty();
+        assertThat(doc.select("#customerName")).isNotEmpty();
+        assertThat(xDataValue).contains("createCustomer()");
+        assertThat(xDataValue).contains("createCustomerAccountCard");
     }
 }
