@@ -14,6 +14,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The app runs with an in-memory H2 database seeded by `src/main/resources/data.sql`. GraphiQL UI is available at `/graphiql`.
 
+
+## Coding style guide
+
+### Use Lombok
+Use Lombok annotations where possible, but keep special attention to toString, equals and hashCode concerns. Especially for entities.
+
+### Java coding preferences
+
+Use the Objects class for null checks etc, e.g. do not do `input.getAccount() != null` instead use `Objects.nonNull(input.getAccount())`.
+
+Use modern Java features, like `var` instead of always declaring the type everywhere.
+
+For simple objects prefer `records` over standard classes.
+
+When possible, make use of Optional for nullability and avoid null checks.
+
 ## Architecture
 
 This is a Spring Boot 3.5 / Java 21 GraphQL playground with **Apollo Federation** support.
@@ -40,7 +56,7 @@ Three entities with these relationships:
 
 ### Front end
 
-Server side rendering is done using freemarker templates which sets up the layout and includes necessary JavaScript and CSS.
+Server side rendering is done using freemarker templates which sets up the layout and nav menu and includes the necessary JavaScript and CSS.
 
 Dynamic UI is created by using Alpine.js which in turn makes GraphQL requests to the backend.
 
