@@ -1,5 +1,7 @@
 package me.mikael.graphqlstuff.configuration;
 
+import graphql.analysis.MaxQueryComplexityInstrumentation;
+import graphql.analysis.MaxQueryDepthInstrumentation;
 import org.springframework.boot.autoconfigure.graphql.GraphQlSourceBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +9,7 @@ import org.springframework.graphql.data.federation.FederationSchemaFactory;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 import me.mikael.graphqlstuff.entity.Customer;
 
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -30,7 +33,12 @@ public class GraphQlConfiguration {
 
     @Bean
     public GraphQlSourceBuilderCustomizer customizer(FederationSchemaFactory federationSchemaFactory) {
-        return builder -> builder.schemaFactory(federationSchemaFactory::createGraphQLSchema);
+        return builder -> builder
+                .schemaFactory(federationSchemaFactory::createGraphQLSchema)
+                .instrumentation(List.of(
+                        new MaxQueryDepthInstrumentation(10),
+                        new MaxQueryComplexityInstrumentation(200)
+                ));
     }
 
     @Bean
