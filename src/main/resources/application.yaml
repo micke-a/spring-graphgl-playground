@@ -19,6 +19,9 @@ spring:
   docker:
     compose:
       enabled: false
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftlh
   graphql:
     graphiql:
       enabled: true
