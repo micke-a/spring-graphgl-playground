@@ -8,6 +8,9 @@ import me.mikael.graphqlstuff.model.CardType;
 import me.mikael.graphqlstuff.repository.AccountRepository;
 import me.mikael.graphqlstuff.repository.CardRepository;
 import me.mikael.graphqlstuff.repository.CustomerRepository;
+import me.mikael.graphqlstuff.dto.DeleteCardPayload;
+import me.mikael.graphqlstuff.dto.UserError;
+import me.mikael.graphqlstuff.service.CardService;
 import me.mikael.graphqlstuff.service.CreateCustomerAccountCardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -38,6 +42,9 @@ class MutationControllerTest {
 
     @MockitoBean
     private CardRepository cardRepository;
+
+    @MockitoBean
+    private CardService cardService;
 
     @Test
     void createCustomer_returnsCreatedCustomer() {
@@ -150,6 +157,45 @@ class MutationControllerTest {
                 .path("createCustomerAccountCard.card.cardHolderId").entity(String.class).isEqualTo("1")
                 .path("createCustomerAccountCard.card.accountId").entity(String.class).isEqualTo("10")
                 .path("createCustomerAccountCard.errors").entityList(Object.class).hasSize(0);
+    }
+
+    @Test
+    void deleteCard_existingId_returnsDeletedCard() {
+        var card = new Card(1L, 1L, CardType.VIRTUAL, 1L);
+        when(cardService.deleteCard(1L))
+                .thenReturn(new DeleteCardPayload(card, List.of()));
+
+        graphQlTester.document("""
+                        mutation {
+                            deleteCard(id: 1) {
+                                deletedCard { id cardType }
+                                errors { message }
+                            }
+                        }
+                        """)
+                .execute()
+                .path("deleteCard.deletedCard.id").entity(String.class).isEqualTo("1")
+                .path("deleteCard.deletedCard.cardType").entity(String.class).isEqualTo("VIRTUAL")
+                .path("deleteCard.errors").entityList(Object.class).hasSize(0);
+    }
+
+    @Test
+    void deleteCard_nonExistentId_returnsUserError() {
+        when(cardService.deleteCard(9999L))
+                .thenReturn(new DeleteCardPayload(null, List.of(new UserError("Card not found with id: 9999", List.of("deleteCard", "id")))));
+
+        graphQlTester.document("""
+                        mutation {
+                            deleteCard(id: 9999) {
+                                deletedCard { id }
+                                errors { message path }
+                            }
+                        }
+                        """)
+                .execute()
+                .path("deleteCard.deletedCard").valueIsNull()
+                .path("deleteCard.errors").entityList(Object.class).hasSize(1)
+                .path("deleteCard.errors[0].message").entity(String.class).isEqualTo("Card not found with id: 9999");
     }
 
     @Test

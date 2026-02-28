@@ -79,9 +79,15 @@ type CreateCustomerAccountCardPayload {
     errors: [UserError!]!
 }
 
+type DeleteCardPayload {
+    deletedCard: Card
+    errors: [UserError!]!
+}
+
 type Mutation {
     createCustomer(input: CreateCustomerInput!): Customer!
     createAccount(input: CreateAccountInput!): Account!
     createCard(input: CreateCardInput!): Card!
     createCustomerAccountCard(input: CreateCustomerAccountCardInput!): CreateCustomerAccountCardPayload!
+    deleteCard(id: ID!): DeleteCardPayload!
 }

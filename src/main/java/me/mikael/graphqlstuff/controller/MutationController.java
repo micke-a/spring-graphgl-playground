@@ -9,6 +9,7 @@ import me.mikael.graphqlstuff.entity.Customer;
 import me.mikael.graphqlstuff.repository.AccountRepository;
 import me.mikael.graphqlstuff.repository.CardRepository;
 import me.mikael.graphqlstuff.repository.CustomerRepository;
+import me.mikael.graphqlstuff.service.CardService;
 import me.mikael.graphqlstuff.service.CreateCustomerAccountCardService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -23,6 +24,7 @@ public class MutationController {
     private final AccountRepository accountRepository;
     private final CardRepository cardRepository;
     private final CreateCustomerAccountCardService createCustomerAccountCardService;
+    private final CardService cardService;
 
     @MutationMapping
     public Customer createCustomer(@Argument CreateCustomerInput input) {
@@ -56,5 +58,11 @@ public class MutationController {
     public CreateCustomerAccountCardPayload createCustomerAccountCard(@Argument CreateCustomerAccountCardInput input) {
         log.info("createCustomerAccountCard");
         return createCustomerAccountCardService.create(input);
+    }
+
+    @MutationMapping
+    public DeleteCardPayload deleteCard(@Argument Long id) {
+        log.info("deleteCard id={}", id);
+        return cardService.deleteCard(id);
     }
 }
