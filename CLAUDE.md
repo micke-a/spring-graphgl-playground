@@ -12,7 +12,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Package:** `./mvnw package`
 - **Generate GraphQL client code:** `./mvnw graphqlcodegen:generate` (output: `me.mikael.graphqlstuff.codegen`)
 
-The app runs with an in-memory H2 database seeded by `src/main/resources/data.sql`. GraphiQL UI is available at `/graphiql`.
+The app runs with an in-memory H2 database seeded by `src/main/resources/data.sql`. 
+
+GraphiQL UI is available at `/graphiql`.
 
 
 ## Coding style guide
@@ -22,7 +24,7 @@ Use Lombok annotations where possible, but keep special attention to toString, e
 
 ### Java coding preferences
 
-Use the Objects class for null checks etc, e.g. do not do `input.getAccount() != null` instead use `Objects.nonNull(input.getAccount())`.
+Use the Objects class for null checks etc., e.g., do not do `input.getAccount() != null` instead use `Objects.nonNull(input.getAccount())`.
 
 Use modern Java features, like `var` instead of always declaring the type everywhere.
 
@@ -56,9 +58,9 @@ Three entities with these relationships:
 
 ### Front end
 
-Server side rendering is done using freemarker templates which sets up the layout and nav menu and includes the necessary JavaScript and CSS.
+Server side rendering is done using freemarker templates that set up the layout and nav menu and include the necessary JavaScript and CSS.
 
-Dynamic UI is created by using Alpine.js which in turn makes GraphQL requests to the backend.
+Dynamic UI is created by using Alpine.js, which in turn makes GraphQL requests to the backend.
 
 Bootstrap 5 is used for CSS styling and controls the layout.
 
