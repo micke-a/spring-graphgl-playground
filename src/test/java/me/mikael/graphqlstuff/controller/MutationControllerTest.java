@@ -9,6 +9,7 @@ import me.mikael.graphqlstuff.repository.AccountRepository;
 import me.mikael.graphqlstuff.repository.CardRepository;
 import me.mikael.graphqlstuff.repository.CustomerRepository;
 import me.mikael.graphqlstuff.service.CreateCustomerAccountCardService;
+import me.mikael.graphqlstuff.service.DeleteCardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
@@ -38,6 +39,9 @@ class MutationControllerTest {
 
     @MockitoBean
     private CardRepository cardRepository;
+
+    @MockitoBean
+    private DeleteCardService deleteCardService;
 
     @Test
     void createCustomer_returnsCreatedCustomer() {
