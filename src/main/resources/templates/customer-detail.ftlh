@@ -21,7 +21,21 @@
             this.cards = (cardData.getAllCards || []).filter(c => c.cardHolderId == customerId);
         } catch (e) { this.error = e.message; }
         finally { this.loading = false; }
-    }
+    },
+    async deleteCard(cardId) {
+        try {
+            const data = await graphqlFetch(
+                'mutation($cardId: ID!) { deleteCard(cardId: $cardId) { cardId deleted errors { message } } }',
+                { cardId }
+            );
+            const payload = data.deleteCard;
+            if (payload.deleted) {
+                this.cards = this.cards.filter(c => c.id != payload.cardId);
+            } else {
+                this.error = payload.errors.map(e => e.message).join(', ');
+            }
+        } catch (e) { this.error = e.message; }
+    },
 }">
 
     <a href="/customers" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Customers</a>
@@ -79,6 +93,7 @@
                             <th>ID</th>
                             <th>Type</th>
                             <th>Account ID</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +102,9 @@
                                 <td x-text="card.id"></td>
                                 <td><span class="badge" :class="card.cardType === 'PHYSICAL' ? 'text-bg-primary' : 'text-bg-info'" x-text="card.cardType"></span></td>
                                 <td x-text="card.accountId"></td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" @click="deleteCard(card.id)">Delete</button>
+                                </td>
                             </tr>
                         </template>
                     </tbody>
