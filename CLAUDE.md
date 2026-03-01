@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run single test method:** `./mvnw test -Dtest=CardControllerTest#getAllCards_returnsCards`
 - **Package:** `./mvnw package`
 - **Generate GraphQL client code:** `./mvnw graphqlcodegen:generate` (output: `me.mikael.graphqlstuff.codegen`)
+- **Java version** simply run `jenv local` to set the correct version.
 
 The app runs with an in-memory H2 database seeded by `src/main/resources/data.sql`. 
 
@@ -26,9 +27,10 @@ Use Lombok annotations where possible, but keep special attention to toString, e
 
 Use the Objects class for null checks etc., e.g., do not do `input.getAccount() != null` instead use `Objects.nonNull(input.getAccount())`.
 
-Use modern Java features, like `var` instead of always declaring the type everywhere.
-
-For simple objects prefer `records` over standard classes.
+Use modern Java features
+- `var` instead of always declaring the type everywhere.
+- `switch` expressions instead of `if-else` chains.
+- for simple objects prefer `records` over standard classes.
 
 When possible, make use of Optional for nullability and avoid null checks.
 
@@ -66,4 +68,15 @@ Bootstrap 5 is used for CSS styling and controls the layout.
 
 ### Testing
 
-Tests use `@GraphQlTest` for slice testing with `GraphQlTester` and `@MockitoBean` for repositories. Test profile (`application-test.yaml`) adds `federation.graphqls` from test resources to provide federation directive definitions needed by the schema.
+### Integration testing
+Tests use `@GraphQlTest` for slice testing with `GraphQlTester` and `@MockitoBean` for repositories. 
+Test profile (`application-test.yaml`) adds `federation.graphqls` from test resources to provide federation directive definitions needed by the schema, set this using `@ActiveProfiles("test")` 
+
+#### Unit testing
+
+Heavily favor using parameterized tests for testing methods with different inputs.
+
+Always double-check that edge cases are covered
+- Inputs are null
+- String inputs are empty or not containing enough characters for the logic.
+- If nested fields are used, veirfy that the parent is not null and the nested field is not null.
