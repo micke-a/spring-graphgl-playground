@@ -12,6 +12,11 @@ public class NameOnCardFormatter {
     private NameOnCardFormatter() {}
 
     public static String format(String firstName, String lastName, Format format) {
-        return null;
+        return switch (format) {
+            case FIRST_NAME -> firstName;
+            case LAST_NAME  -> lastName;
+            case F1_LAST    -> firstName.charAt(0) + " " + lastName;
+            case FIRST_L1   -> firstName + " " + lastName.charAt(0);
+        };
     }
 }
